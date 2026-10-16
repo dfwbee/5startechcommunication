@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { supabase, DEVICES_TABLE, PHOTO_BUCKET } from '../../lib/supabase';
+import { supabase, supabaseEnvStatus, DEVICES_TABLE, PHOTO_BUCKET } from '../../lib/supabase';
 import { DeviceRow } from '../../lib/loadInventory';
 import { USED_CATEGORIES } from '../../data/ukUsedData';
 import { formatNaira } from '../../lib/quote';
@@ -88,7 +88,12 @@ const AdminPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center p-6 bg-slate-100">
         <div className="max-w-md bg-white rounded-2xl border border-slate-200 p-6 text-sm text-slate-700 space-y-2">
           <h1 className="font-heading font-black text-lg">Admin is not connected yet</h1>
-          <p>The Supabase keys are missing. The developer needs to add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> (see SETUP_SUPABASE.md).</p>
+          <p>This build of the website did not receive the Supabase keys.</p>
+          <ul className="text-xs space-y-1">
+            <li>VITE_SUPABASE_URL: <strong className={supabaseEnvStatus.hasUrl && !supabaseEnvStatus.urlIsPlaceholder ? 'text-emerald-600' : 'text-red-600'}>{!supabaseEnvStatus.hasUrl ? 'MISSING' : supabaseEnvStatus.urlIsPlaceholder ? 'still the placeholder' : 'found'}</strong></li>
+            <li>VITE_SUPABASE_ANON_KEY: <strong className={supabaseEnvStatus.hasKey ? 'text-emerald-600' : 'text-red-600'}>{supabaseEnvStatus.hasKey ? 'found' : 'MISSING'}</strong></li>
+          </ul>
+          <p className="text-xs text-slate-500">Add both in the host's Environment Variables (exact names above, enabled for Production), then trigger a NEW deployment. See SETUP_SUPABASE.md.</p>
         </div>
       </div>
     );
