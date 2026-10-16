@@ -9,3 +9,10 @@ export const supabase: SupabaseClient | null =
 
 export const DEVICES_TABLE = 'uk_devices';
 export const PHOTO_BUCKET = 'device-photos';
+
+/** Used by the admin page to explain exactly what is missing. */
+export const supabaseEnvStatus = {
+  hasUrl: !!url,
+  hasKey: !!key,
+  urlIsPlaceholder: !!url && url.includes('YOUR-PROJECT'),
+};

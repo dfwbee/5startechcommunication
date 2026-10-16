@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { } from '../../lib/supabase';
 
 export const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
