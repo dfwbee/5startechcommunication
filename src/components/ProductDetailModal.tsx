@@ -73,11 +73,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             {/* Image */}
             <div className="md:col-span-5 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 aspect-4/3 bg-slate-950">
-              <img 
-                src={product.imageUrl} 
-                alt={product.name} 
-                className="w-full h-full object-cover"
-              />
+              {product.imageUrl && (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
 
             {/* Details & Pricing */}

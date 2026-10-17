@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { PRODUCTS_DATA, BUSINESS_INFO } from '../data/mockData';
 import { Product } from '../types';
+import { loadProducts } from '../lib/loadProducts';
 import { ProductDetailModal } from './ProductDetailModal';
 import { 
   Search, 
@@ -28,6 +29,10 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onOpenQuote })
   const [selectedCondition, setSelectedCondition] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalProduct, setActiveModalProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Product[]>(PRODUCTS_DATA);
+
+  // The owner edits these in the admin page (#admin). Falls back to the built-in list if Supabase is not set up.
+  useEffect(() => { loadProducts().then(setProducts); }, []);
 
   const isLight = theme === 'light';
 
@@ -41,7 +46,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onOpenQuote })
   ];
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS_DATA.filter((product) => {
+    return products.filter((product) => {
       // Category filter
       if (selectedCategory !== 'all' && product.category !== selectedCategory) {
         return false;
@@ -65,7 +70,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onOpenQuote })
       }
       return true;
     });
-  }, [selectedCategory, selectedCondition, searchQuery]);
+  }, [products, selectedCategory, selectedCondition, searchQuery]);
 
   return (
     <section 
@@ -92,7 +97,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onOpenQuote })
             </h2>
             
             <p className={`text-base leading-relaxed ${isLight ? 'text-slate-600' : 'text-slate-300'}`}>
-              High-performance business laptops, robust desktop towers, heavy-duty office printers, 4K commercial CCTV arrays, and pure copper networking infrastructure in Alimosho.
+              High-performance business laptops, robust desktop towers, heavy-duty office printers, 4K commercial CCTV arrays, and pure copper networking infrastructure in Ikeja.
             </p>
           </div>
 
@@ -223,12 +228,16 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onOpenQuote })
                   <div>
                     {/* Image Container with Badges */}
                     <div className="relative aspect-16/10 overflow-hidden bg-slate-900">
-                      <img 
-                        src={product.imageUrl} 
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
-                        loading="lazy"
-                      />
+                      {product.imageUrl ? (
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-600"><Layers className="w-14 h-14" strokeWidth={1.25} /></div>
+                      )}
                       
                       <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                         <span className={`text-xs font-semibold px-2.5 py-0.5 rounded shadow-xs ${
